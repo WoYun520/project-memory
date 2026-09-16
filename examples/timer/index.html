@@ -1,0 +1,5 @@
+<!doctype html>
+<html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>虚构练习 · 计时器</title>
+<style>body{font:18px system-ui;max-width:36rem;margin:4rem auto;padding:1rem;background:#f5f8f2;color:#263f30}output{display:block;font-size:3rem;margin:2rem 0}button{font:inherit;padding:.6rem 1rem;margin-right:1rem}</style>
+<h1>离线计时器</h1><p>虚构练习项目，没有真实工作历史。</p><output id="elapsed" aria-label="经过秒数">0 秒</output><button id="start">开始</button><button id="reset">重置</button>
+<script>let seconds=0,timer=null;const display=document.querySelector('#elapsed');document.querySelector('#start').onclick=()=>{if(timer!==null)return;timer=setInterval(()=>{display.textContent=++seconds+' 秒';},1000);};document.querySelector('#reset').onclick=()=>{clearInterval(timer);timer=null;seconds=0;display.textContent='0 秒';};</script></html>

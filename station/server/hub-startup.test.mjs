@@ -1,0 +1,31 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import net from 'node:net';
+import {spawn} from 'node:child_process';
+import {once} from 'node:events';
+import {fileURLToPath} from 'node:url';
+const station=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+test('hub keeps the same pending child beyond the old deadline and connects when ready',async t=>{
+ const root=fs.mkdtempSync(path.join(os.tmpdir(),'memory-permission-wait-'));
+ t.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+ const socket=net.createServer();socket.listen(0,'127.0.0.1');await once(socket,'listening');const port=socket.address().port;await new Promise(r=>socket.close(r));
+ fs.mkdirSync(path.join(root,'server'));fs.mkdirSync(path.join(root,'dist'));
+ fs.symlinkSync(path.join(station,'node_modules'),path.join(root,'node_modules'));
+ fs.symlinkSync(path.join(station,'server/local-tools.mjs'),path.join(root,'server/local-tools.mjs'));
+ fs.writeFileSync(path.join(root,'dist/index.html'),'synthetic fixture');
+ // Advance only the hub clock beyond 90 seconds; the child is still starting.
+ const hub=fs.readFileSync(path.join(station,'hub.mjs'),'utf8').replace('#!/usr/bin/env node\n','');
+ fs.writeFileSync(path.join(root,'hub.mjs'),hub.replace('const deadline=Date.now()+90000;', 'const deadline=Date.now()+90000;Date.now=()=>deadline+1;'));
+ fs.writeFileSync(path.join(root,'server/entry.mjs'),`import http from 'node:http';import fs from 'node:fs';fs.appendFileSync(${JSON.stringify(path.join(root,'launches'))},'1');await new Promise(r=>setTimeout(r,250));http.createServer((q,s)=>{s.setHeader('Content-Type','application/json');s.end(JSON.stringify({service:'project-memory-station'}))}).listen(${port},'127.0.0.1');`);
+ const child=spawn(process.execPath,[path.join(root,'hub.mjs'),'--no-open'],{env:{...process.env,MEMORY_STATION_DATA_DIR:path.join(root,'data'),MEMORY_STATION_PORT:String(port),MEMORY_RADAR_ROOT:''},stdio:['ignore','pipe','pipe']});
+ t.after(async()=>{if(child.exitCode===null){child.kill('SIGTERM');await once(child,'exit');}});
+ let output='';child.stderr.on('data',b=>{output+=b});child.stdout.resume();
+ const deadline=performance.now()+7000;
+ while(!output.includes('MEMORY_STATION_STARTUP:ready')&&child.exitCode===null&&performance.now()<deadline)await new Promise(r=>setTimeout(r,50));
+ assert.match(output,/MEMORY_STATION_STARTUP:ready/);
+ assert.equal(fs.readFileSync(path.join(root,'launches'),'utf8'),'1');
+ assert.equal(child.exitCode,null);
+});

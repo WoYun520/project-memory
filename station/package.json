@@ -1,0 +1,29 @@
+{
+  "name": "project-memory-station",
+  "version": "0.39.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "start": "node server/index.mjs",
+    "test": "node --test server/*.test.mjs",
+    "hub": "node hub.mjs",
+    "desktop:build": "python3 desktop/build-app.py"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.30.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

@@ -1,0 +1,17 @@
+**/node_modules/
+**/dist/
+**/data/
+**/.DS_Store
+**/.env
+**/.env.*
+**/*.log
+**/*.worklog.json
+**/desktop.json
+**/local-tools.json
+**/memory-station-codex.mjs
+**/memory-station-claude.mjs
+**/memory-station-claude.settings.json
+desktop-release/
+work/
+outputs/
+*.zip
