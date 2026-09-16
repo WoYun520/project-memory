@@ -4,6 +4,18 @@
 
 记忆站就是帮你管理这份交接记录的。**你仍然在 Codex 或 Claude Code 里工作；记忆站负责把检查过的项目记录交给下一位 AI。**
 
+## 先看一段演示：1 分 45 秒，了解怎么换 AI
+
+[![记忆站双 AI 接续演示：Codex 完成暂停按钮，Claude Code 接着添加空格键控制](media/codex-to-claude-demo.jpg)](media/codex-to-claude-demo.mp4)
+
+**[打开演示视频](media/codex-to-claude-demo.mp4)** · [下载 MP4（约 9.8 MB）](https://github.com/WoYun520/project-memory/raw/refs/heads/main/docs/media/codex-to-claude-demo.mp4)
+
+如果 GitHub 页面没有出现播放器，点击上面的「下载 MP4」后用本机播放器打开即可。
+
+这段视频用一个贪吃蛇展示完整过程：**Codex 加暂停按钮 → 检查并保存记录 → 点击第三步，交给 Claude Code → 增加空格键控制 → 再次检查保存 → 看游戏效果。** 任务继续在各自的 AI 工具里完成。
+
+视频为无声实录，配有步骤字幕；长时间等待已删减，部分画面加速。中途曾出现记录投递失败，修正与重新投递未录入原片，视频用字幕交代。使用的是独立演示项目和专门演示界面，预置素材为演示内容；按钮与当前下载版可能略有不同，安装和日常使用以下文为准。这次演示成功不代表所有使用场景均已验证。
+
 ## 先准备好
 
 - 一台 Apple 芯片的 Mac，系统为 macOS 13 或更新版本。苹果菜单 → 关于本机，可以查看。
